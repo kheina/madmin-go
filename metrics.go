@@ -33,8 +33,6 @@ import (
 	"time"
 
 	"github.com/prometheus/procfs"
-	"github.com/shirou/gopsutil/v3/cpu"
-	"github.com/shirou/gopsutil/v3/load"
 )
 
 // MetricType is a bitfield representation of different metric types.
@@ -638,9 +636,7 @@ type CPUMetrics struct {
 	// Time these metrics were collected
 	CollectedAt time.Time `json:"collected"`
 
-	TimesStat *cpu.TimesStat `json:"timesStat"`
-	LoadStat  *load.AvgStat  `json:"loadStat"`
-	CPUCount  int            `json:"cpuCount"`
+	CPUCount int `json:"cpuCount"`
 }
 
 // Merge other into 'm'.
@@ -649,18 +645,4 @@ func (m *CPUMetrics) Merge(other *CPUMetrics) {
 		// Use latest timestamp
 		m.CollectedAt = other.CollectedAt
 	}
-	m.TimesStat.User += other.TimesStat.User
-	m.TimesStat.System += other.TimesStat.System
-	m.TimesStat.Idle += other.TimesStat.Idle
-	m.TimesStat.Nice += other.TimesStat.Nice
-	m.TimesStat.Iowait += other.TimesStat.Iowait
-	m.TimesStat.Irq += other.TimesStat.Irq
-	m.TimesStat.Softirq += other.TimesStat.Softirq
-	m.TimesStat.Steal += other.TimesStat.Steal
-	m.TimesStat.Guest += other.TimesStat.Guest
-	m.TimesStat.GuestNice += other.TimesStat.GuestNice
-
-	m.LoadStat.Load1 += other.LoadStat.Load1
-	m.LoadStat.Load5 += other.LoadStat.Load5
-	m.LoadStat.Load15 += other.LoadStat.Load15
 }
